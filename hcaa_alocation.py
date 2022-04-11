@@ -1,7 +1,9 @@
 from scipy.cluster.hierarchy import linkage
-from sklearn.datasets import make_blobs
 import numpy as np
+import pandas as pd
+import scipy.spatial.distance as ssd
 
+# Auxiliary function to get the node_id and the capital allocation for each cluster
 def get_levels(n_clusters, n_filas, mat_Z):
     nodos_id = []
     nivel_nodo = []
@@ -26,6 +28,7 @@ def get_levels(n_clusters, n_filas, mat_Z):
         current_level += 1
     return(nodos_id, nivel_nodo)
 
+# Auxiliary function to get the assets id's of each cluster 
 def get_leaves(id_nodo, mat_Z, n_filas):
     if id_nodo <= n_filas -1:
         return [id_nodo]
@@ -49,9 +52,17 @@ def get_leaves(id_nodo, mat_Z, n_filas):
         el_2.append(id_nodo_1)
         return(el_2)
 
+
+# function to get the weight of the cluster 
 def hcaa_alocation(mat_X, n_clusters):
-    Z = linkage(mat_X, 'ward', optimal_ordering = True)
-    n_filas = mat_X.shape[0]
+    # Convertir matriz de datos en matriz de distancias
+    E_matrix = np.corrcoef(mat_X.T)
+    D_matrix = np.sqrt(2*(1- E_matrix))
+    D_matrix = np.around(D_matrix, decimals=7)
+    D_condensed = ssd.squareform(D_matrix)
+    # bla bla
+    Z = linkage(D_condensed, 'ward', optimal_ordering = True)
+    n_filas = mat_X.shape[1]
     levels = get_levels(n_clusters, n_filas, Z)
     index_asset = []
     capital_all = []
@@ -62,14 +73,17 @@ def hcaa_alocation(mat_X, n_clusters):
         else:
             assets = get_leaves(node_id, Z, n_filas)
             cluster_weight = levels[1][index]
-            asset_weight = round(cluster_weight/len(assets), 4)
+            asset_weight = round(cluster_weight/len(assets), 6)
             index_asset += assets
             capital_all += [asset_weight] *len(assets)
+    print(sum(capital_all))
     return (index_asset, capital_all)
 
-X = [[i] for i in [2, 8, 0, 4, 1, 9, 9, 0]]
-X = np.asarray(X)
 
-test, y = make_blobs(n_samples=10, centers=3, n_features=2, random_state=0)
-print(hcaa_alocation(test, 3))
+
+# El input de la función son los returns en una matriz numpy de n (observaciones) x t (activos) ordenadas 
+data = pd.read_csv('./data/psi_20_returns.csv', index_col='Date')
+data = data.values
+
+print(hcaa_alocation(data, 5))
     
