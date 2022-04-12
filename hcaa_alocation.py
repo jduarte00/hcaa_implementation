@@ -1,6 +1,5 @@
 from scipy.cluster.hierarchy import linkage
 import numpy as np
-import pandas as pd
 import scipy.spatial.distance as ssd
 
 # Auxiliary function to get the node_id and the capital allocation for each cluster
@@ -81,9 +80,5 @@ def hcaa_alocation(mat_X, n_clusters):
 
 
 
-# El input de la función son los returns en una matriz numpy de n (observaciones) x t (activos) ordenadas 
-data = pd.read_csv('./data/psi_20_returns.csv', index_col='Date')
-data = data.values
 
-print(hcaa_alocation(data, 5))
     
