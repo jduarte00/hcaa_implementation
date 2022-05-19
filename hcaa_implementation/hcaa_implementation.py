@@ -3,7 +3,7 @@ import numpy as np
 import scipy.spatial.distance as ssd
 
 # Auxiliary function to get the node_id and the capital allocation for each cluster
-def get_levels(n_clusters, n_filas, mat_Z):
+def get_levels(n_clusters: int, n_filas: int, mat_Z: np.matrix):
     nodos_id = []
     nivel_nodo = []
     filas_Z = mat_Z.shape[0]
@@ -52,8 +52,8 @@ def get_leaves(id_nodo, mat_Z, n_filas):
         return(el_2)
 
 
-# function to get the weight of the cluster 
-def hcaa_alocation(mat_X, n_clusters):
+# function to get the weight of the cluster.
+def hcaa_alocation(mat_X: np.matrix, n_clusters:int)->tuple:
     # Convertir matriz de datos en matriz de distancias
     E_matrix = np.corrcoef(mat_X.T)
     D_matrix = np.sqrt(2*(1- E_matrix))
@@ -75,7 +75,6 @@ def hcaa_alocation(mat_X, n_clusters):
             asset_weight = round(cluster_weight/len(assets), 6)
             index_asset += assets
             capital_all += [asset_weight] *len(assets)
-    print(sum(capital_all))
     return (index_asset, capital_all)
 
 
