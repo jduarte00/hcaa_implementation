@@ -53,13 +53,15 @@ def get_leaves(id_nodo, mat_Z, n_filas):
 
 
 # function to get the weight of the cluster.
-def hcaa_alocation(mat_X: np.matrix, n_clusters:int)->tuple:
+def hcaa_alocation(mat_X: np.matrix, n_clusters:int, custom_corr =np.corrcoef ,inverse_data = True)->tuple:
     # Convertir matriz de datos en matriz de distancias
-    E_matrix = np.corrcoef(mat_X.T)
+    if not inverse_data:
+        E_matrix = custom_corr(mat_X)
+    else:    
+        E_matrix = custom_corr(mat_X.T)
     D_matrix = np.sqrt(2*(1- E_matrix))
     D_matrix = np.around(D_matrix, decimals=7)
     D_condensed = ssd.squareform(D_matrix)
-    # bla bla
     Z = linkage(D_condensed, 'ward', optimal_ordering = True)
     n_filas = mat_X.shape[1]
     levels = get_levels(n_clusters, n_filas, Z)
