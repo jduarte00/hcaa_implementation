@@ -51,9 +51,15 @@ def get_leaves(id_nodo, mat_Z, n_filas):
         el_2.append(id_nodo_1)
         return(el_2)
 
+# function to the appropiate number of groups given a cutoff point
+def get_groups(Z_mat: np.matrix, cutoff_point: float)->int:
+    distances = Z_mat[:,2]
+    number_groups = int(distances.shape[0] - (sum(distances <= cutoff_point)) +1)
+    return number_groups
+
 
 # function to get the weight of the cluster.
-def hcaa_alocation(mat_X: np.matrix, n_clusters:int, custom_corr =np.corrcoef ,inverse_data = True)->tuple:
+def hcaa_alocation(mat_X: np.matrix, n_clusters:int = 0, custom_corr =np.corrcoef ,inverse_data = True, cutoff_point: float = None)->tuple:
     # Convertir matriz de datos en matriz de distancias
     if not inverse_data:
         E_matrix = custom_corr(mat_X)
@@ -63,6 +69,8 @@ def hcaa_alocation(mat_X: np.matrix, n_clusters:int, custom_corr =np.corrcoef ,i
     D_matrix = np.around(D_matrix, decimals=7)
     D_condensed = ssd.squareform(D_matrix)
     Z = linkage(D_condensed, 'ward', optimal_ordering = True)
+    if cutoff_point:
+        n_clusters = get_groups(Z, cutoff_point)
     n_filas = mat_X.shape[1]
     levels = get_levels(n_clusters, n_filas, Z)
     index_asset = []
