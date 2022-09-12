@@ -1,6 +1,7 @@
-from scipy.cluster.hierarchy import linkage
 import numpy as np
 import scipy.spatial.distance as ssd
+from scipy.cluster.hierarchy import linkage
+
 
 # Auxiliary function to get the node_id and the capital allocation for each cluster
 def get_levels(n_clusters: int, n_filas: int, mat_Z: np.matrix):
