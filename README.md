@@ -11,4 +11,8 @@ This algorithm also requires the definition of a distance between assets in orde
 
 $$ D_{i,j} = \sqrt{2 (1 - \rho_{i,j})}$$
 
+where $\rho_{i.j}$ is the correlation between asset $i$ and asset $j$ calculated over the returns of both assets. This implementation uses the pearson correlation coefficient by default, but is also capable of using a custom correlation function (e.g. the RIE estimator, which I've also implemented in python and you can find in [here.](https://github.com/jduarte00/rie_estimator). 
+
+Althought this is still some documentation missing, the implementation is complete, so feel free to use it and reach to me if you have any doubts, I'll be adding documentation and some usage examples in the future. 
+
 
