@@ -9,6 +9,6 @@ where $c_i$ and $c_j$ are the centroids of two clusters.
 
 This algorithm also requires the definition of a distance between assets in order to meassure similarities between them. The following distance between an asset $i$ and an asset $j$ was introduced by Mantegna in 1999 and is defined as follows:
 
-$$ D_{i,j} = \sqrt{2 (1 - \ro_{i,j})}$$
+$$ D_{i,j} = \sqrt{2 (1 - \rho_{i,j})}$$
 
 
