@@ -60,7 +60,7 @@ def get_groups(Z_mat: np.matrix, cutoff_point: float)->int:
 
 
 # function to get the weight of the cluster.
-def hcaa_alocation(mat_X: np.matrix, n_clusters:int = 0, custom_corr =np.corrcoef ,inverse_data = True, cutoff_point: float = None)->tuple:
+def hcaa_alocation(mat_X: np.matrix, n_clusters:int = 0, custom_corr =np.corrcoef ,inverse_data = True, cutoff_point: float = None, return_groups: bool = False)->tuple:
     # Convertir matriz de datos en matriz de distancias
     if not inverse_data:
         E_matrix = custom_corr(mat_X)
@@ -76,6 +76,7 @@ def hcaa_alocation(mat_X: np.matrix, n_clusters:int = 0, custom_corr =np.corrcoe
     levels = get_levels(n_clusters, n_filas, Z)
     index_asset = []
     capital_all = []
+    index_assets_groups = []
     for index, node_id in enumerate(levels[0]):
         if node_id <= n_filas-1:
             index_asset.append(node_id)
@@ -84,8 +85,11 @@ def hcaa_alocation(mat_X: np.matrix, n_clusters:int = 0, custom_corr =np.corrcoe
             assets = get_leaves(node_id, Z, n_filas)
             cluster_weight = levels[1][index]
             asset_weight = round(cluster_weight/len(assets), 6)
+            index_assets_groups.append(assets)
             index_asset += assets
             capital_all += [asset_weight] *len(assets)
+    if return_groups:
+        return (index_asset, capital_all, index_assets_groups) 
     return (index_asset, capital_all)
 
 
